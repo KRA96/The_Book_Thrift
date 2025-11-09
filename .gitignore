@@ -1,5 +1,6 @@
 .env
 raw_data/
+bookshelf_pics
+.envrc
 .python-version
 NBs_original_authors_exploration
-bookshelf_pics
