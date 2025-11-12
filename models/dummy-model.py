@@ -1,4 +1,5 @@
-def test_1():
-    return('test 1')
+def dummy_rec():
+    return('Book recomendation for you: The Lord of the Rings')
+
 if __name__ == '__main__':
-    test_1
+    dummy_rec
