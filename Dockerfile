@@ -1,10 +1,10 @@
 FROM python:3.12.9-slim
 # slim version to reduce image size . buster version is a larger
 
-COPY models models
-COPY book_thrift_package book_thrift_package
-COPY requirements.txt requirements.txt
-COPY setup.py setup.py
+COPY backend/models backend/models
+COPY backend/api_file backend/api_file
+COPY backend/requirements.txt backend/requirements.txt
+COPY backend/setup.py backend/setup.py
 
 RUN pip install --upgrade pip
 RUN pip install -e .
