@@ -1,6 +1,5 @@
 FROM python:3.12.9-slim
-#change python version as needed
-#slim version to reduce image size . buster version is a larger
+# slim version to reduce image size . buster version is a larger
 
 COPY models models
 COPY book_thrift_package book_thrift_package

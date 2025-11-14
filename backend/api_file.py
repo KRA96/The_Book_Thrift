@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get('/')
 def root():
-    return {"message": "Welcomeeeeee to the book thrifting app!"}
+    return {"message": "Your Dummy Book Recommendation Online App"}
 
 @app.get("/predict")
 def predict():
