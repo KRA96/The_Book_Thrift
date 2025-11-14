@@ -1,0 +1,16 @@
+# API
+fastapi==0.121.1
+uvicorn==0.38.0
+
+# ML
+pandas==2.3.3
+numpy==2.3.4
+scikit-learn==1.7.2
+
+#.env
+# dotenv=0.9.9  # Not sure if needed. the one below is needed to read env
+          # variables in jupyter notebooks
+python-dotenv=1.2.1
+
+# Needed for importing data from bigquery
+db-dtypes==1.4.4
