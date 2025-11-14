@@ -7,3 +7,4 @@ NBs_original_authors_exploration
 .DS_Store
 notebooks/
 pics/
+*.pyc
