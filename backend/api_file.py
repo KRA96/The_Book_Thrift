@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from models.dummy_model import dummy_rec
-app = FastAPI()
+app = FastAPI(title="Dummy Book Recommender Backend")
 
 @app.get('/')
 def root():
