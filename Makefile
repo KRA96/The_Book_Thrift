@@ -38,7 +38,7 @@ push_image_production:
 
 # Step 5
 deploy_to_cloud_run:
-	gcloud run deploy --image $$GCP_REGION-docker.pkg.dev/$$GCP_PROJECT/$$ARTIFACTSREPO/$$IMAGE:prod --memory $$MEMORY --region $$GCP_REGION
+	gcloud run deploy --image $$GCP_REGION-docker.pkg.dev/$$GCP_PROJECT/$$ARTIFACTSREPO/$$IMAGE:prod --memory $$MEMORY --region $$GCP_REGION --env-vars-file .env.yaml
 
 
 # Disabling the Service
