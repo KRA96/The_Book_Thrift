@@ -7,3 +7,6 @@ NBs_original_authors_exploration
 .DS_Store
 pics/
 *.pyc
+*.pkl
+*.bin
+*.joblib
