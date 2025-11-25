@@ -13,7 +13,14 @@ from IPython.display import clear_output
 from scipy.sparse import csr_matrix
 from implicit.als import AlternatingLeastSquares
 import joblib
-
+# Get score
+def get_score(interactions_df): #TODO: Should this score be modified?
+        """
+        generate score from user interactions data.
+        """
+        return interactions_df["is_read"] \
+            + interactions_df["rating"] \
+            + interactions_df["is_reviewed"] * 2
 
 def load_data_and_build_csr(csv: str = "/Users/krahmed96/code/KRA96/The_Book_Thrift/raw_data/goodreads_interactions.csv"):
     """
@@ -29,15 +36,6 @@ def load_data_and_build_csr(csv: str = "/Users/krahmed96/code/KRA96/The_Book_Thr
         df[int_8_cols] = df[int_8_cols].astype("int8")
         df[["user_id", "book_id"]] = df[["user_id", "book_id"]].astype("int32")
         return df
-
-    ## get score
-    def get_score(interactions_df): #TODO: Should this score be modified?
-        """
-        generate score from user interactions data.
-        """
-        return interactions_df["is_read"] \
-            + interactions_df["rating"] \
-            + interactions_df["is_reviewed"] * 2
 
     def get_csr_matrix(df_path="../raw_data/goodreads_interactions.csv"):
         """
