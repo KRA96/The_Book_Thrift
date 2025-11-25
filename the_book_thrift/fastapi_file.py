@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from models.dummy_model import dummy_rec
+from ML_logic.recommender import ALSRecommender
 app = FastAPI(title="Dummy Book Recommender Backend")
 
 @app.get('/')
@@ -8,4 +8,6 @@ def root():
 
 @app.get("/predict")
 def predict():
-    return dummy_rec()
+    als = ALSRecommender()
+    user = als._get_user_profile()
+    print(als.recommend_books())
