@@ -127,6 +127,6 @@ def get_recommendation(model, user_id, sparse_matrix, n_recs):
     """
     #TODO: build a book id and title database for quick lookup on book id.
     recs = model.recommend(userid=user_id,
-                    user_items=sparse_matrix,
+                    user_items=sparse_matrix[user_id],
                     N=n_recs)
     return recs[0]
