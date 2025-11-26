@@ -10,4 +10,4 @@ def root():
 def predict():
     als = ALSRecommender()
     user = als._get_user_profile()
-    print(als.recommend_books())
+    return als.recommend_books()
