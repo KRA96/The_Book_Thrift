@@ -9,6 +9,11 @@ from scipy import sparse
 import os
 from the_book_thrift.ML_logic.collab_model import get_score
 import numpy as np
+from google.cloud import bigquery
+
+# Import environ variables
+project = os.environ["PROJECT"]
+dataset = os.environ["DATASET"]
 
 class ALSRecommender():
     """
@@ -20,19 +25,26 @@ class ALSRecommender():
 
     def __init__(
         self,
-        model_path: str = os.environ["MODEL_PATH"],
-        book_titles_path: str = "/Users/krahmed96/code/KRA96/The_Book_Thrift/raw_data/book_titles.csv",
+        model_path: str | None = None,
         book_id_col: str = "book_id"
     ) -> None:
+        # Resolve model_path at runtime to avoid accessing environment variables
+        # at module import time (which caused failures inside Docker).
+        if model_path is None:
+            model_path = os.environ.get("MODEL_PATH")
+        if not model_path:
+            raise RuntimeError("MODEL_PATH is not set. Set it in the environment or in the constructor.")
+
         artifact = joblib.load(model_path)
         self.model = artifact["model"]
         self.n_items = artifact["n_items"]
 
-        # Read book titles file and store it
-        self.book_titles: pd.Dataframe | None = None
-        titles = pd.read_csv(book_titles_path)
-        # titles = titles.set_index(book_id_col)
-        self.book_titles = titles
+        # import data from bigquery
+        client = bigquery.Client()
+        query = f"""
+        SELECT * from `{project}.{dataset}.book_titles`
+        """
+        self.book_titles = client.query(query).to_dataframe()
 
 
     def _get_user_profile(self,
@@ -43,7 +55,6 @@ class ALSRecommender():
         the ALS model
         """
         user_raw = pd.read_csv(profile_csv)     #TODO: put all this in a pipeline maybe
-
         user = user_raw[
         ["Book Id",
         "My Rating",
@@ -99,7 +110,8 @@ class ALSRecommender():
 
         rec_ids, scores = self.model.recommend(
             userid=0,
-            user_items=user_items
+            user_items=user_items,
+            recalculate_user=True
         )
 
         rec_ids = rec_ids.astype(int)
