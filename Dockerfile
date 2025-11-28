@@ -27,7 +27,7 @@ RUN pip install -e .
 WORKDIR /the_book_thrift/
 
 # Local development: run uvicorn from inside the package directory
-CMD ["uvicorn", "fastapi_file:app", "--reload", "--host", "0.0.0.0"]
+# CMD ["uvicorn", "fastapi_file:app", "--reload", "--host", "0.0.0.0"]
 
 # GCP (cloud) development examples (uncomment & adjust if deploying to cloud)
-# CMD ["uvicorn", "the_book_thrift.fastapi_file:app", "--host", "0.0.0.0", "--port", "${PORT:-8080}"]
+CMD uvicorn fastapi_file:app --host 0.0.0.0 --port $PORT
