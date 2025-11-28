@@ -12,17 +12,15 @@ def load_recommender():
 recsys = load_recommender()
 
 uploaded_file = st.file_uploader("Upload your Goodreads CSV", type=["csv"])
-
-# goodreads_url = st.text_input('Paste your Goodreads profile url here')
-
+API_URL = "http://localhost:8000"
+# send to fastapi
 if uploaded_file is not None and st.button("Get recommendations"):
-    res = requests.get(url='https://the-book-thrift-43012920273.europe-west1.run.app/predict').json()
-    st.write(res)
-
-
-    # if not book_image:
-    #     st.warning("Please upload a picture of the shelf you're browing")
-    # if not goodreads_url:
-    #     st.warning('Please enter a Goodreads profile url')
-    # else:
-    #     st.write('Your book recommendation:', 'The Lord of the Rings')
+    files = {
+        "file": (uploaded_file.name, uploaded_file.getvalue(), uploaded_file.type)
+    }
+    resp = requests.post(f"{API_URL}/predict", files=files)
+    if resp.ok:
+        st.write("Recommendations:")
+        st.dataframe(resp.json())
+    else:
+        st.error(f"Error: {resp.status_code} - {resp.text}")
