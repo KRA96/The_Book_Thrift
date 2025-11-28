@@ -10,3 +10,4 @@ pics/
 *.pkl
 *.bin
 *.joblib
+*.csv

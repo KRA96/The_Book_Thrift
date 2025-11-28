@@ -6,10 +6,7 @@ based on similar users.
 import pandas as pd
 import numpy as np
 import os
-import time
 import gzip
-import matplotlib.pyplot as plt
-from IPython.display import clear_output
 from scipy.sparse import csr_matrix
 from implicit.als import AlternatingLeastSquares
 import joblib
@@ -47,7 +44,6 @@ def load_data_and_build_csr(csv: str = "/Users/krahmed96/code/KRA96/The_Book_Thr
         book_list = []
         score_list = []
         for chunk_no, chunk in enumerate(pd.read_csv(df_path, chunksize=200_000)):
-            clear_output(wait=True)
             print(f"Processed {chunk_no} chunks")
             chunk = downcast(chunk)
             scores = get_score(chunk)

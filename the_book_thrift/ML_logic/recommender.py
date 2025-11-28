@@ -4,11 +4,26 @@ recommend a book from the existing books in user interactions
 """
 
 import joblib
+from pathlib import Path
 import pandas as pd
 from scipy import sparse
 import os
-from the_book_thrift.ML_logic.collab_model import get_score
+from .collab_model import get_score
 import numpy as np
+from google.cloud import bigquery
+
+# Import environ variables
+project = os.environ["GCP_PROJECT"]
+dataset = os.environ["DATASET"]
+
+# Assign paths
+HERE = Path(__file__).resolve().parent
+PROJECT_ROOT = HERE.parent
+
+# Path to model
+MODEL_PATH = HERE/"als_model.pkl"
+TITLES_PATH = PROJECT_ROOT/"book_titles.csv"
+
 
 class ALSRecommender():
     """
@@ -20,48 +35,49 @@ class ALSRecommender():
 
     def __init__(
         self,
-        model_path: str = os.environ["MODEL_PATH"],
-        book_titles_path: str = "/Users/krahmed96/code/KRA96/The_Book_Thrift/raw_data/book_titles.csv",
+        model_path: str = MODEL_PATH,
         book_id_col: str = "book_id"
     ) -> None:
+        # Resolve model_path at runtime to avoid accessing environment variables
+        # at module import time (which caused failures inside Docker).
+        model_path = model_path
         artifact = joblib.load(model_path)
         self.model = artifact["model"]
         self.n_items = artifact["n_items"]
 
-        # Read book titles file and store it
-        self.book_titles: pd.Dataframe | None = None
-        titles = pd.read_csv(book_titles_path)
-        # titles = titles.set_index(book_id_col)
-        self.book_titles = titles
-
+        # import data from bigquery if doesn't exist locally
+        titles_path = TITLES_PATH
+        self.book_titles = pd.read_csv(titles_path)
 
     def _get_user_profile(self,
-                          profile_csv="/Users/krahmed96/code/KRA96/The_Book_Thrift/raw_data/goodreads_library_export.csv"
-        ) -> sparse.csr_matrix:
+                          profile_csv
+                          ) -> sparse.csr_matrix:
         """
         Takes a user's csv upload and creates a user csr matrix to use within
         the ALS model
         """
-        user_raw = pd.read_csv(profile_csv)     #TODO: put all this in a pipeline maybe
-
+        user_raw = pd.read_csv(
+            profile_csv)  # TODO: put all this in a pipeline maybe
         user = user_raw[
-        ["Book Id",
-        "My Rating",
-        "Exclusive Shelf",
-        "My Review"]
+            ["Book Id",
+             "My Rating",
+             "Exclusive Shelf",
+             "My Review"]
         ]
 
         # Clean Col Names
         user.columns = ["_".join(col.lower().split()) for col in user.columns]
 
         # Keep only book ids present in our book titles dataset
-        my_books = set(user["book_id"][user["book_id"] <= self.n_items])    # Keep only book_ids less than n_items.
+        # Keep only book_ids less than n_items.
+        my_books = set(user["book_id"][user["book_id"] <= self.n_items])
         all_books = set(self.book_titles["book_id"])
         common_books = pd.Series(list(my_books.intersection(all_books)))
 
         # If no common books, rasie error
         if common_books.empty:
-            raise ValueError("No overlapping book_ids between user CSV and catalogue")
+            raise ValueError(
+                "No overlapping book_ids between user CSV and catalogue")
 
         user = user[user["book_id"].isin(common_books)]
 
@@ -95,16 +111,19 @@ class ALSRecommender():
 
     def recommend_books(self,
                         user_items,
-                        n_recs: int = 20):      #TODO: using Nrecs in recommend causes error where implicit asks for int.
+                        # TODO: using Nrecs in recommend causes error where implicit asks for int.
+                        n_recs: int = 20):
 
         rec_ids, scores = self.model.recommend(
             userid=0,
-            user_items=user_items
+            user_items=user_items,
+            recalculate_user=True
         )
 
         rec_ids = rec_ids.astype(int)
 
-        titles = self.book_titles.loc[self.book_titles.index.intersection(rec_ids)].copy()
+        titles = self.book_titles.loc[self.book_titles.index.intersection(
+            rec_ids)].copy()
         titles = titles.reindex(rec_ids)
 
         res = []
@@ -116,7 +135,10 @@ class ALSRecommender():
 
         return res
 
+
 if __name__ == "__main__":
     ALS = ALSRecommender()
-    user = ALS._get_user_profile()  # Returns sparse matrix with user's scores
+    # Returns sparse matrix with user's scores
+    user = ALS._get_user_profile(
+        "/Users/krahmed96/code/KRA96/The_Book_Thrift/raw_data/goodreads_library_export.csv")
     print(ALS.recommend_books(user))
