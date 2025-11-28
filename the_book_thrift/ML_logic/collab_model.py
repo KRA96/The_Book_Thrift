@@ -10,7 +10,11 @@ import gzip
 from scipy.sparse import csr_matrix
 from implicit.als import AlternatingLeastSquares
 import joblib
+from pathlib import Path
 # Get score
+
+HERE = HERE = Path(__file__).resolve().parent
+
 def get_score(interactions_df): #TODO: Should this score be modified?
         """
         generate score from user interactions data.
@@ -19,7 +23,7 @@ def get_score(interactions_df): #TODO: Should this score be modified?
             + interactions_df["rating"] \
             + interactions_df["is_reviewed"] * 2
 
-def load_data_and_build_csr(csv: str = "/Users/krahmed96/code/KRA96/The_Book_Thrift/raw_data/goodreads_interactions.csv"):
+def load_data_and_build_csr(interactions_csv_path: str):
     """
     Loads interactions dataset, reduces memory storage by downcasting,
     creates scores based on user ratings, and generates a sparse matrix
@@ -34,7 +38,7 @@ def load_data_and_build_csr(csv: str = "/Users/krahmed96/code/KRA96/The_Book_Thr
         df[["user_id", "book_id"]] = df[["user_id", "book_id"]].astype("int32")
         return df
 
-    def get_csr_matrix(df_path="../raw_data/goodreads_interactions.csv"):
+    def get_csr_matrix(df_path):
         """
         Generate arrays of all users, all books, and implicit + explicit scores
         for each user to build a CSR matrix ready to be fed into an Alternating
@@ -77,16 +81,16 @@ def load_data_and_build_csr(csv: str = "/Users/krahmed96/code/KRA96/The_Book_Thr
             dtype="float32"
         )
 
-    return get_csr_matrix(csv)
+    return get_csr_matrix(interactions_csv_path)
 
 
-def train_and_save(output_path: str = "/Users/krahmed96/code/KRA96/The_Book_Thrift/the_book_thrift/ML Logic/als_model.pkl"):
+def train_and_save(input_csv: str, output_path: str):
     """
     Instantiate an ALS model and fit it on pre-generated sparse matrix.
     Returns a fitted model.
     """
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
-    interactions_csr = load_data_and_build_csr()
+    interactions_csr = load_data_and_build_csr(input_csv)
 
     model = AlternatingLeastSquares(
         factors = 128,
@@ -104,6 +108,3 @@ def train_and_save(output_path: str = "/Users/krahmed96/code/KRA96/The_Book_Thri
 
     joblib.dump(artifact, output_path, compress=3)
     print(f"Saved model to {output_path}")
-
-if __name__ == "__main__":
-    train_and_save()
