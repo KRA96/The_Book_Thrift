@@ -1,4 +1,5 @@
 .env
+.env.yaml
 raw_data/
 bookshelf_pics
 .envrc
