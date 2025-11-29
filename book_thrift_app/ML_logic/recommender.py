@@ -5,11 +5,15 @@ recommend a book from the existing books in user interactions
 
 import joblib
 from pathlib import Path
+import os
+
 import pandas as pd
 from scipy import sparse
-import os
-from .collab_model import get_score
 import numpy as np
+
+from .collab_model import get_score
+from book_thrift_app.params import *
+
 from google.cloud import bigquery
 
 # Import environ variables
@@ -21,10 +25,7 @@ HERE = Path(__file__).resolve().parent
 PROJECT_ROOT = HERE.parent
 
 # Path to model
-MODEL_PATH = HERE/"als_model.pkl"
 TITLES_PATH = PROJECT_ROOT/"book_titles.csv"
-
-
 class ALSRecommender():
     """
     Wraps the implicit ALS model to:
@@ -32,7 +33,6 @@ class ALSRecommender():
     - Pass a user's Goodread's library download
     - Get back recommendations
     """
-
     def __init__(
         self,
         model_path: str = MODEL_PATH,

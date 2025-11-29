@@ -5,13 +5,13 @@ based on similar users.
 """
 import pandas as pd
 import numpy as np
-import os
-import gzip
 from scipy.sparse import csr_matrix
 from implicit.als import AlternatingLeastSquares
+
+import os
+import gzip
 import joblib
 from pathlib import Path
-# Get score
 
 HERE = HERE = Path(__file__).resolve().parent
 
@@ -38,7 +38,7 @@ def load_data_and_build_csr(interactions_csv_path: str):
         df[["user_id", "book_id"]] = df[["user_id", "book_id"]].astype("int32")
         return df
 
-    def get_csr_matrix(df_path):
+    def get_csr_matrix(df_path):    #TODO: create interactions pipeline
         """
         Generate arrays of all users, all books, and implicit + explicit scores
         for each user to build a CSR matrix ready to be fed into an Alternating
@@ -65,9 +65,10 @@ def load_data_and_build_csr(interactions_csv_path: str):
             user_list.append(u_idx.to_numpy())
             book_list.append(b_idx.to_numpy())
             score_list.append(scores.to_numpy())
-            # Last chunk to be processed is currently: 5
-            if chunk_no > 5:
-                break
+
+            if os.environ["TRAINING_ON"] == "local":
+                if chunk_no > 5:
+                    break
 
         # Make 1D arrays:
         user_idx = np.concatenate(user_list)
@@ -89,7 +90,6 @@ def train_and_save(input_csv: str, output_path: str):
     Instantiate an ALS model and fit it on pre-generated sparse matrix.
     Returns a fitted model.
     """
-    os.makedirs(os.path.dirname(output_path), exist_ok=True)
     interactions_csr = load_data_and_build_csr(input_csv)
 
     model = AlternatingLeastSquares(
