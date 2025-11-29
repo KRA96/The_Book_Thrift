@@ -1,7 +1,7 @@
 import streamlit as st
 import requests
 import os
-from book_thrift_app.ML_logic.recommender import ALSRecommender
+# from book_thrift_app.ML_logic.recommender import ALSRecommender
 
 st.set_page_config(page_title='Dummy book Recommender', page_icon=':books:')
 st.title('MVP Book Recommender')
