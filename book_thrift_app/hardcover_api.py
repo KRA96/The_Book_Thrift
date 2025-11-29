@@ -2,16 +2,14 @@ import requests
 import pandas as pd
 import os
 import numpy as np
-
-# get token
-token = os.environ['TOKEN']
+from params import *
 
 def get_random_book():
     url = "https://api.hardcover.app/v1/graphql"
 
     headers = {
     "content-type": "application/json",
-    "authorization": f"Bearer {os.environ['TOKEN']}"
+    "authorization": f"Bearer {TOKEN}"
 }
 
     query = """
