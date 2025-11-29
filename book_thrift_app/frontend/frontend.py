@@ -6,13 +6,6 @@ from book_thrift_app.ML_logic.recommender import ALSRecommender
 st.set_page_config(page_title='Dummy book Recommender', page_icon=':books:')
 st.title('MVP Book Recommender')
 
-# Load recommender as cache
-@st.cache_resource
-def load_recommender():
-    return ALSRecommender()
-
-recsys = load_recommender()
-
 # Get file upload
 uploaded_file = st.file_uploader("Upload your Goodreads CSV", type=["csv"])
 
