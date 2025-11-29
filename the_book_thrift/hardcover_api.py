@@ -34,5 +34,7 @@ def get_random_book():
     size = len(response.json()['data']['user_books'])
 
     return response.json()['data']['user_books'][np.random.choice(size)]['book']['title']
+
+
 if __name__ == "__main__":
     print(get_random_book())

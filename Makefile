@@ -2,11 +2,21 @@
 ### DOCKER LOCAL
 #########
 
+test_recommender:
+	python the_book_thrift/ML_logic/recommender.py
+
+streamlit_local:
+	streamlit run the_book_thrift/frontend/frontend.py
+
 build_container_local:
 	docker build --tag=$$IMAGE:dev .
 
 run_container_local:
-	docker run -it -e PORT=8000 -p 8000:8000 $$IMAGE:dev
+	docker run -it \
+	--env-file=.env \
+	-e PORT=8000 \
+	-p 8000:8000 \
+	$$IMAGE:dev
 
 
 #########

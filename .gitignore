@@ -1,10 +1,14 @@
 .env
+.env.yaml
 raw_data/
 bookshelf_pics
 .envrc
 .python-version
 NBs_original_authors_exploration
 .DS_Store
-notebooks/
 pics/
 *.pyc
+*.pkl
+*.bin
+*.joblib
+*.csv
