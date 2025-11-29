@@ -10,13 +10,13 @@ st.title('MVP Book Recommender')
 uploaded_file = st.file_uploader("Upload your Goodreads CSV", type=["csv"])
 
 # load model target and, depending on it, change frontend behaviour
-model_target = os.environ["MODEL_TARGET"]
+model_target = os.environ.get("MODEL_TARGET",None)
 
 recs = None      # ChatGPT says to guard res at startup time
 
 if model_target == "cloud":
     # Assign google cloud URL
-    API_URL = "https://the-book-thrift-43012920273.europe-west1.run.app"
+    API_URL = os.environ.get("API_URL")
 
 else:
     API_URL = "http://localhost:8000"
