@@ -67,7 +67,7 @@ def get_info_from_dataset_by_title_exact(title: str, df: pd.DataFrame):
     row = df[df["title"] == title]
     if row.empty:
         return None
-    # On renvoie la première correspondance comme dict
+
     return row.iloc[0].to_dict()
 
 
@@ -85,7 +85,7 @@ def get_info_from_dataset_by_title_fuzzy(title: str, df: pd.DataFrame, threshold
     best = process.extractOne(
         title,
         titles,
-        scorer=fuzz.WRatio  # bon scoreur général
+        scorer=fuzz.WRatio
     )
 
     if best is None:
@@ -94,7 +94,6 @@ def get_info_from_dataset_by_title_fuzzy(title: str, df: pd.DataFrame, threshold
     best_title, score, index = best
 
     if score < threshold:
-        # trop différent, on considère que ce n'est pas fiable
         return None
 
     row = df.iloc[index].to_dict()
