@@ -314,8 +314,21 @@ def make_cluster_labels(df_cleaned, pipeline, top_n=5):
 
     return labels
 
+#TODO: Does it make sense to add this function to class so we don't have to get
+    # mapping everytime??
+def map_book_id_to_index(df):
+    """
+    Use pipe named steps method to get a stable mapping from book id to index
+    """
+    pipe = build_pipeline(do_k_means=False)
+    clean_df = pipe.named_steps["clean"].tranform(df)
+    feat_df = pipe.named_steps["build_features"].transform(clean_df)
+
+    return {book_id: i for i, book_id in enumerate(feat_df["book_id"].tolist())}
+
 # User pipeline
-def get_user_books(user_profile: Path):
+def get_user_books(user_profile: Path, books_data_path_and_size): #TODO: need to build a bookid map to index
+                                            #  during above pipeline to use in this part
     """
     Takes a user's goodreads profile and builds a vector of books they've
     read to get similar books
@@ -324,3 +337,10 @@ def get_user_books(user_profile: Path):
     (user_profile["My Rating"] != 0) |
     (user_profile["Exclusive Shelf"] == "read")
     ]
+    # DO NOT RUN THE FN AS THE BELOW WILL RUN ON FULL DATASET
+    book_id_to_index = map_book_id_to_index(books_data_path_and_size)
+
+    read_books_index = [book_id_to_index.get(b_id) for b_id in read_books]
+
+    mean_user_vector = np.average[None]     #TODO This code needs normalised feature matrix obtained from
+                                            # pipeline above. How do I save this matrix in an efficient way?
