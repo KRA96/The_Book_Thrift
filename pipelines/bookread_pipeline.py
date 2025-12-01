@@ -226,6 +226,7 @@ class GoodreadsFeatureBuilder(BaseEstimator, TransformerMixin):
 # Pipeline builder
 
 def build_pipeline(
+    do_k_means=True,    # to test not doing clustering right now
     numeric_cols=CFG.numeric_cols,
     stop_words=CFG.stop_words,
     max_features=CFG.max_features,
@@ -257,16 +258,23 @@ def build_pipeline(
         verbose_feature_names_out=False
     )
 
-    pipe = Pipeline(steps=[
-        ("clean", GoodreadsCleaner()),
-        ("build_features", GoodreadsFeatureBuilder(numeric_cols=numeric_cols)),
-        ("features", features),
-        ("cluster", MiniBatchKMeans(
-            n_clusters=n_clusters,
-            random_state=random_state,
-            batch_size=batch_size
-        ))
-    ])
+    if do_k_means:
+        pipe = Pipeline(steps=[
+            ("clean", GoodreadsCleaner()),
+            ("build_features", GoodreadsFeatureBuilder(numeric_cols=numeric_cols)),
+            ("features", features),
+            ("cluster", MiniBatchKMeans(
+                n_clusters=n_clusters,
+                random_state=random_state,
+                batch_size=batch_size
+            ))
+        ])
+    else:
+        pipe = Pipeline(steps=[
+            ("clean", GoodreadsCleaner()),
+            ("build_features", GoodreadsFeatureBuilder(numeric_cols=numeric_cols)),
+            ("features", features)
+        ])
     return pipe
 
 
