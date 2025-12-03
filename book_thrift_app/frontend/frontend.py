@@ -1,10 +1,44 @@
 import streamlit as st
 import requests
 import os
+from pathlib import Path
 # from book_thrift_app.ML_logic.recommender import ALSRecommender
 
-st.set_page_config(page_title='Dummy book Recommender', page_icon=':books:')
-st.title('MVP Book Recommender')
+st.set_page_config(page_title='The Book Thrift', page_icon='📚')
+
+# Custom CSS to match the beige color scheme
+st.markdown("""
+    <style>
+    .stApp {
+        background-color: #F5EFE7;
+    }
+    .stButton>button {
+        background-color: #D4A574;
+        color: white;
+    }
+    h1 {
+        color: #1E3A5F;
+    }
+    /* Style all text elements */
+    .stMarkdown, p, label {
+        color: #3D3D3D ;
+    }
+    /* Make file uploader background match */
+    [data-testid="stFileUploader"] {
+        background-color: #F5EFE7;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Get the directory where this file is located
+current_dir = Path(__file__).parent
+image_path = current_dir / "book_cover2.png"
+
+# Display image
+st.image(str(image_path), use_container_width=True)
+
+# Use markdown with HTML for better color control
+st.markdown('<h1 style="color: #1E3A5F;">📚 The Book Thrift</h1>', unsafe_allow_html=True)
 
 # Get file upload
 uploaded_file = st.file_uploader("Upload your Goodreads CSV", type=["csv"])
