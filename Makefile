@@ -1,6 +1,15 @@
 #########
 ### DOCKER LOCAL
 #########
+write_yaml_env:
+	sed 's/^\([^=]*\)=\(.*\)/\1: "\2"/' .env > .env.yaml
+
+fast_local_test:
+	uvicorn the_book_thrift.fast:app --reload --host 0.0.0.0
+
+reinstall_package:
+	@pip uninstall -y the_book_thrift|| :
+	@pip install -e .
 
 test_recommender:
 	python the_book_thrift/ML_logic/recommender.py
