@@ -10,18 +10,18 @@ st.set_page_config(page_title='The Book Thrift', page_icon='📚')
 st.markdown("""
     <style>
     .stApp {
-        background-color: #F5EFE7 !important;
+        background-color: #F5EFE7;
     }
     .stButton>button {
         background-color: #D4A574;
         color: white;
     }
     h1 {
-        color: #1E3A5F !important;
+        color: #1E3A5F;
     }
     /* Style all text elements */
     .stMarkdown, p, label {
-        color: #3D3D3D !important;
+        color: #3D3D3D ;
     }
     /* Make file uploader background match */
     [data-testid="stFileUploader"] {
