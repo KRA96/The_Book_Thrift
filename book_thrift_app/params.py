@@ -1,7 +1,21 @@
 import os
 
+
 # Model
-MODEL_PATH = os.environ["CURRENT_MODEL_PATH"]
+COLLAB_MODEL = os.environ["ALS_4_DEC"]
+TFID_FITTED = os.environ["TFID_FITTED"]
+
+# Paths to models and npy files
+BOOK_ID_PATH = os.environ["BOOK_ID_PATH"]
+USER_MAPPING_PATH = os.environ["USER_MAPPING_PATH"]
+BOOK_MAPPING_PATH = os.environ["BOOK_MAPPING_PATH"]
+ALS_4_DEC = os.environ["ALS_4_DEC"]
+ALL_BOOKS = os.environ["ALL_BOOKS"]
+
+# Paths to data
+BOOK_TITLES = os.environ["BOOK_TITLES"]
+INTERACTIONS_CLEAN= os.environ["INTERACTIONS_CLEAN"]
+
 # GCP and GCS vars
 GCP_PROJECT  =  os.environ["GCP_PROJECT"]
 GCP_REGION  =  os.environ["GCP_REGION"]
