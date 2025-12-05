@@ -64,7 +64,8 @@ user = st.file_uploader("Upload your Goodreads CSV", type=["csv"])
 
 # run OCR
 if shelf is not None and st.session_state.ocr_result is None:
-    st.write("Detecting book titles...")
+    # st.write("Detecting book titles...")
+    st.markdown("<span style='color:black'>Detecting book titles...</span>", unsafe_allow_html=True)
     files = {
         "shelf": (shelf.name, shelf.getvalue(), shelf.type),
     }
