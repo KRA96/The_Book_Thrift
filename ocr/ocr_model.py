@@ -4,7 +4,7 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 import pandas as pd
-from rapidfuzz import process, fuzz
+# from rapidfuzz import process, fuzz
 import time
 
 BOOK_DF = pd.read_csv(
@@ -83,30 +83,30 @@ def get_info_from_dataset_by_title_exact(title: str, df_indexed: pd.DataFrame):
 
 
 
-def get_info_from_dataset_by_title_fuzzy(title: str, df: pd.DataFrame, threshold: int = 80):
+# def get_info_from_dataset_by_title_fuzzy(title: str, df: pd.DataFrame, threshold: int = 80):
 
-    if not isinstance(title, str) or not title.strip():
-        return None
+#     if not isinstance(title, str) or not title.strip():
+#         return None
 
-    titles = df["title"].tolist()
+#     titles = df["title"].tolist()
 
-    best = process.extractOne(
-        title,
-        titles,
-        scorer=fuzz.WRatio
-    )
+#     best = process.extractOne(
+#         title,
+#         titles,
+#         scorer=fuzz.WRatio
+#     )
 
-    if best is None:
-        return None
+#     if best is None:
+#         return None
 
-    best_title, score, index = best
+#     best_title, score, index = best
 
-    if score < threshold:
-        return None
+#     if score < threshold:
+#         return None
 
-    row = df.iloc[index].to_dict()
-    row["_match_score"] = score
-    return row
+#     row = df.iloc[index].to_dict()
+#     row["_match_score"] = score
+#     return row
 
 #4. Test of exact match and fuzzy ones if not working
 def get_info_from_dataset_by_title(title: str,
