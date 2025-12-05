@@ -1,18 +1,24 @@
+# ML
+import numpy as np
+import pandas as pd
+
+# Fast API
 from fastapi import FastAPI, UploadFile, File, HTTPException, Form
 from fastapi.responses import JSONResponse
-from .ML_logic.recommender import ALSRecommender
-import pandas as pd
+
+# Utils
 import json
-import numpy as np
 import os
-from book_thrift_app.params import INTERACTIONS_CLEAN, BOOK_MAPPING_PATH
+
+# package
+from .ML_logic.recommender import ALSRecommender
 from book_thrift_app.ocr.ocr_api import process_image_to_matches_df
 from book_thrift_app.ocr.ml_model import predict_from_matches_df
 from book_thrift_app.ocr.main import _replace_nans
 
-# from ocr.ocr_api import process_image_to_matches_df
-# from ocr.ml_model import predict_from_matches_df
-# from ocr.main import _replace_nans
+# environ vars
+INTERACTIONS_CLEAN = os.environ["INTERACTIONS_CLEAN"]
+BOOK_MAPPING_PATH = os.environ["BOOK_MAPPING_PATH"]
 
 app = FastAPI(title="Dummy Book Recommender Backend")
 

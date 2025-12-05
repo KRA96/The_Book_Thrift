@@ -2,18 +2,25 @@
 This module takes a user's Goodreads profile download (CSV) and uses it to
 recommend a book from the existing books in user interactions
 """
-
+# utils
 import joblib
 from pathlib import Path
+import os
 
+# ML
 import pandas as pd
 from scipy import sparse
 import numpy as np
 
+# packages
 from .collab_model import get_score
-from book_thrift_app.params import (
-    COLLAB_MODEL, BOOK_TITLES, BOOK_ID_PATH, BOOK_MAPPING_PATH
-)
+
+# env vars
+COLLAB_MODEL = os.environ["COLLAB_MODEL"]
+BOOK_TITLES = os.environ["BOOK_TITLES"]
+BOOK_ID_PATH = os.environ["BOOK_ID_PATH"]
+BOOK_MAPPING_PATH = os.environ["BOOK_MAPPING_PATH"]
+
 class ALSRecommender():
     """
     Wraps the implicit ALS model to:

@@ -47,7 +47,6 @@ if user is not None and st.button("Get recommendations"):
         "user": (user.name, user.getvalue(), user.type or "image/jpeg")}
     data = {
         "ocr_result": json.dumps(st.session_state.ocr_result["items"])}
-    st.write(f"ocr result from predict req: {data}")
     res = requests.post(f"{API_URL}/predict", data=data, files=files)
     if not res.ok:
         st.error(f"Error: {res.status_code} - {res.text}")
