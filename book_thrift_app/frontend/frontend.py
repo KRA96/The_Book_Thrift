@@ -43,7 +43,9 @@ st.image(str(image_path), use_container_width=True)
 st.markdown('<h1 style="color: #1E3A5F;">📚 The Book Thrift</h1>', unsafe_allow_html=True)
 
 # load model target and, depending on it, change frontend behaviour
-model_target = os.environ.get("MODEL_TARGET", None)
+# model_target = os.environ.get("MODEL_TARGET", None)
+# set model target as cloud
+model_target = "cloud"
 
 if model_target == "cloud":     # assign cloud or local url based on model target
     API_URL = os.environ.get("API_URL")
