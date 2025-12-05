@@ -48,7 +48,7 @@ st.markdown('<h1 style="color: #1E3A5F;">📚 The Book Thrift</h1>', unsafe_allo
 model_target = "cloud"
 
 if model_target == "cloud":     # assign cloud or local url based on model target
-    API_URL = os.environ.get("API_URL")
+    API_URL = "https://the-book-thrift-43012920273.europe-west1.run.app"
 else:
     API_URL = "http://localhost:8000"
 
